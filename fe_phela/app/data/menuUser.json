@@ -1,0 +1,92 @@
+{
+    "mainMenu": [
+        {
+          "id":1,
+          "title": "Sản phẩm",
+          "link": "/#",
+          "subMenu": [
+            {
+              "title": "Sản phẩm",
+              "link": "/san-pham"
+            },
+            {
+              "title": "Order",
+              "link": "/order"
+            }
+          ]
+        },
+        {
+          "id":2,
+          "title": "Câu chuyện thương hiệu",
+          "link": "/#",
+          "subMenu": [
+            {
+              "title": "Về Phê La",
+              "link": "/ve-chung-toi"
+            },
+            {
+              "title": "Phong cách khác biệt",
+              "link": "/phong-cach-khac-biet-tai-phe-la"
+            },
+            {
+              "title": "Trân châu ô long",
+              "link": "/category/tran-chau-o-long"
+            }
+          ]
+        },
+        {
+          "id":3,
+          "title": "Tin tức",
+          "link": "tin-tuc",
+          "subMenu": [
+            {
+              "title": "Ưu đãi",
+              "link": "/uu-dai"
+            },
+            {
+              "title": "Sự kiện",
+              "link": "/su-kien"
+            }
+          ]
+        },
+        {
+          "id":4,
+          "title": "Cửa hàng",
+          "link": "/he-thong-cua-hang",
+          "subMenu": []
+        },
+        {
+          "id":5,
+          "title": "Tuyển dụng",
+          "link": "/tuyen-dung",
+          "subMenu": [
+            { "title": "Khối văn phòng", "link": "/khoi-van-phong" },
+            { "title": "Khối cửa hàng", "link": "/khoi-cua-hang" }
+          ]
+        },
+        {
+          "id":6,
+          "title": "Thẻ thành viên",
+          "link": "/#",
+          "subMenu": [
+              {
+                  "title": "Điều khoản & điều lệ",
+                  "link": "/dieu-khoan-va-dieu-kien-su-dung-the-thanh-vien-phe-la"
+              }
+          ]
+        },
+        {
+          "id":7,
+          "title": "Liên hệ",
+          "link": "/lien-he",
+          "subMenu": []
+        },
+        {
+          "id":8,
+          "title": "Chuyện đặc sản",
+          "link": "/chuyendacsan",
+          "subMenu": []
+        }
+      ]
+  }
+  
