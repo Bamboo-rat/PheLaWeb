@@ -76,6 +76,12 @@ public class Customer implements UserDetails {
     @Column(name = "order_cancel_times",nullable = false)
     private int orderCancelTimes = 0;
 
+    @Column(name = "latitude")
+    Double latitude;
+
+    @Column(name = "longitude")
+    Double longitude;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));

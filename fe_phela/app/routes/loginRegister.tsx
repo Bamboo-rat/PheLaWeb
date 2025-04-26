@@ -1,5 +1,5 @@
 import type { Route } from "./+types/loginRegister";
-import LoginRegister from "~/pages/account/LoginRegister";
+import LoginRegister from "~/pages/customer/account/LoginRegister";
 
 export function meta({}: Route.MetaArgs) {
   return [

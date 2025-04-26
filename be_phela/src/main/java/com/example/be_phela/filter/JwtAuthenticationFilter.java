@@ -35,13 +35,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         // Bỏ qua các endpoint không cần xác thực
         String requestURI = request.getRequestURI();
-        if (requestURI.equals("/auth/admin/register") ||
-                requestURI.equals("/auth/customer/register") ||
-                requestURI.equals("/auth/admin/login") ||
-                requestURI.equals("/auth/customer/login") || requestURI.equals("/api/v1/verify")) {
+
+        if (requestURI.startsWith("/auth/") || requestURI.equals("/api/v1/verify")) {
             chain.doFilter(request, response);
             return;
         }
+
+//        if (requestURI.equals("/auth/admin/register") ||
+//                requestURI.equals("/auth/customer/register") ||
+//                requestURI.equals("/auth/admin/login") ||
+//                requestURI.equals("/auth/customer/login") || requestURI.equals("/api/v1/verify")) {
+//            chain.doFilter(request, response);
+//            return;
+//        }
 
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

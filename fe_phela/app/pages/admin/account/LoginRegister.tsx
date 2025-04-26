@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import phela from "../../assets/images/phela.jpg"; // Import ảnh
+import phela from "../../../assets/images/phela.jpg"; // Import ảnh
 import Login from "./Login";
 import Register from "./Register";
 

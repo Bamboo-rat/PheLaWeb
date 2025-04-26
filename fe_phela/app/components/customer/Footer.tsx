@@ -1,12 +1,12 @@
 // Footer.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from "../assets/images/logo.png";
+import logo from "../../assets/images/logo.png";
 import { FaFacebook } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { TbBrandYoutube } from "react-icons/tb";
 import { PiTiktokLogo } from "react-icons/pi";
-import "../assets/css/Footer.css";
+import "../../assets/css/Footer.css";
 
 const Footer = () => {
     return (

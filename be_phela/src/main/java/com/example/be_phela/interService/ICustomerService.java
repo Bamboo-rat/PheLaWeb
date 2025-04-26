@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import java.util.List;
 
 public interface ICustomerService {
+    public String generateCustomerCode();
     Customer createCustomer(CustomerCreateDTO customerCreateDTO);
     Page<CustomerResponseDTO> getAllCustomers(Pageable pageable);
 }

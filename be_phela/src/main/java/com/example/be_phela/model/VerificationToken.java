@@ -24,7 +24,7 @@ public class VerificationToken {
     private String token;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "admin_id")
     private Admin admin;
 
     @OneToOne(fetch = FetchType.LAZY)

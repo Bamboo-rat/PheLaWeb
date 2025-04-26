@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import "../assets/css/Header.css";
-import logo from "../assets/images/logo.png";
-import menuData from '../data/menuUser.json';
+import "../../assets/css/Header.css";
+import logo from "../../assets/images/logo.png";
+import menuData from '../../data/menuAdmin.json';
 import { FaBars, FaTimes } from "react-icons/fa";
 
 function Header() {

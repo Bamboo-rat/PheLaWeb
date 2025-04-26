@@ -23,7 +23,7 @@
         },
         {
           "id":3,
-          "title": "Đơn hàng",
+          "title": "Bán hàng",
           "link": "/#",
           "subMenu": [
             {
@@ -42,31 +42,31 @@
           "link": "/#",
           "subMenu": [
             { "title": "Doanh thu", "link": "/doanh-thu" },
-            { "title": "Khối cửa hàng", "link": "/khoi-cua-hang" }
+            { "title": "Đơn hàng", "link": "/bao-cao-don-hang" }
           ]
         },
         {
           "id":6,
-          "title": "Thẻ thành viên",
+          "title": "Khuyến mãi",
           "link": "/#",
           "subMenu": [
               {
-                  "title": "Điều khoản & điều lệ",
-                  "link": "/dieu-khoan-va-dieu-kien-su-dung-the-thanh-vien-phe-la"
+                  "title": "Chương trình khuyến mãi",
+                  "link": "/chuong-trinh-khuyen-mai"
+              },
+              {
+                  "title": "Mã giảm giá",
+                  "link": "/ma-giam-gia"
+              },
+              {
+                  "title": "Quà tặng",
+                  "link": "/qua-tang"
+              },
+              {
+                  "title": "Tích điểm",
+                  "link": "/tich-diem"
               }
           ]
-        },
-        {
-          "id":7,
-          "title": "Liên hệ",
-          "link": "/lien-he",
-          "subMenu": []
-        },
-        {
-          "id":8,
-          "title": "Chuyện đặc sản",
-          "link": "/chuyendacsan",
-          "subMenu": []
         }
       ]
   }
