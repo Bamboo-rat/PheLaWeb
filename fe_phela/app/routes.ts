@@ -36,11 +36,13 @@ const customerRoutes: RouteConfig = [
     route("chuyendacsan", "routes/specialtyStory.tsx"),
 
     //Tài khoản
-    route("login-register", "routes/loginRegister.tsx"),
+    route("login-register", "routes/loginRegisterCus.tsx"),
 ];
 
 const adminRoutes: RouteConfig = [
-    index("routes/AdminDashboard.tsx"),
+      index("routes/loginRegisterAdmin.tsx"),
+      route("dashboard", "routes/AdminDashboard.tsx"),
+    
 ];
 
 // Try creating the routes without the children property

@@ -3,6 +3,8 @@ package com.example.be_phela.controller;
 import com.example.be_phela.dto.response.AdminResponseDTO;
 import com.example.be_phela.dto.response.ApiResponse;
 import com.example.be_phela.dto.response.CustomerResponseDTO;
+import com.example.be_phela.mapper.CustomerMapper;
+import com.example.be_phela.model.Admin;
 import com.example.be_phela.model.Customer;
 import com.example.be_phela.service.CustomerService;
 import lombok.AccessLevel;
@@ -24,6 +26,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerController {
     CustomerService customerService;
+    CustomerMapper customerMapper;
 
     @GetMapping("/getAll")
     public ResponseEntity<Page<CustomerResponseDTO>> getAdmins(
@@ -34,6 +37,13 @@ public class CustomerController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         Page<CustomerResponseDTO> customerResponseDTOPage = customerService.getAllCustomers(pageable);
         return ResponseEntity.ok(customerResponseDTOPage);
+    }
+
+    @GetMapping("/{username}")
+    public ResponseEntity<CustomerResponseDTO> getAdminByUsername(@PathVariable String username) {
+        Customer customer = customerService.findAdminByUsername(username);
+        CustomerResponseDTO responseDTO = customerMapper.toCustomerResponseDTO(customer);
+        return ResponseEntity.ok(responseDTO);
     }
 
 //    // Lấy thông tin user theo ID (có thể thêm sau)

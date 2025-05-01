@@ -36,26 +36,43 @@ public class AuthenticationController {
     @PostMapping("/customer/register")
     public ResponseEntity<ApiResponse<AuthenticationResponse>> registerCustomer(
             @Valid @RequestBody CustomerCreateDTO request) {
-        return handleRegistration(() -> {
+//        return handleRegistration(() -> authenticationService.registerCustomer(request),
+//                "Đăng ký thành công! Vui lòng kiểm tra email để xác nhận.");
+        // Bọc lời gọi service trong Supplier và xử lý Exception bên trong lambda nếu cần
+        Supplier<AuthenticationResponse> registerSupplier = () -> {
             try {
                 return authenticationService.registerCustomer(request);
             } catch (MessagingException e) {
-                throw new RuntimeException("Không thể gửi email xác nhận: " + e.getMessage(), e);
+                // Ném một RuntimeException để handleRegistration có thể bắt bằng catch(Exception e)
+                // Hoặc bạn có thể xử lý cụ thể hơn ở đây nếu muốn
+                log.error("MessagingException during customer registration in lambda: {}", e.getMessage());
+                // Quan trọng: Ném RuntimeException để báo hiệu lỗi cho handleRegistration
+                throw new RuntimeException("Registration failed due to email sending issue: " + e.getMessage(), e);
             }
-        }, "Đăng ký thành công! Vui lòng kiểm tra email để xác nhận.");
+        };
+
+        return handleRegistration(registerSupplier, // Truyền Supplier đã xử lý exception
+                "Đăng ký thành công! Vui lòng kiểm tra email để xác nhận.");
     }
 
     @PostMapping("/admin/register")
     public ResponseEntity<ApiResponse<AuthenticationResponse>> registerAdmin(
             @Valid @RequestBody AdminCreateDTO request,
             HttpServletRequest httpRequest) {
-        return handleRegistration(() -> {
+//        return handleRegistration(() -> authenticationService.registerAdmin(request, getClientIp(httpRequest)),
+//                "Đăng ký thành công! Vui lòng kiểm tra email để xác nhận.");
+        Supplier<AuthenticationResponse> registerSupplier = () -> {
             try {
-                return authenticationService.registerAdmin(request, getClientIp(httpRequest));
+                String clientIp = getClientIp(httpRequest);
+                return authenticationService.registerAdmin(request, clientIp);
             } catch (MessagingException e) {
-                throw new RuntimeException("Không thể gửi email xác nhận: " + e.getMessage(), e);
+                log.error("MessagingException during admin registration in lambda: {}", e.getMessage());
+                // Ném RuntimeException để báo hiệu lỗi cho handleRegistration
+                throw new RuntimeException("Registration failed due to email sending issue: " + e.getMessage(), e);
             }
-        }, "Đăng ký thành công! Vui lòng kiểm tra email để xác nhận.");
+        };
+        return handleRegistration(registerSupplier, // Truyền Supplier đã xử lý exception
+                "Đăng ký thành công! Vui lòng kiểm tra email để xác nhận.");
     }
 
     @PostMapping("/admin/login")
@@ -114,7 +131,10 @@ public class AuthenticationController {
             return buildResponse(HttpStatus.BAD_REQUEST, "error", e.getMessage(), null);
         } catch (Exception e) {
             log.error("Registration failed: {}", e.getMessage(), e);
-            return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", "Registration failed: " + e.getMessage(), null);
+            String errorMessage = e.getMessage().contains("Không thể gửi email xác nhận")
+                    ? e.getMessage()
+                    : "Registration failed: " + e.getMessage();
+            return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "error", errorMessage, null);
         }
     }
 

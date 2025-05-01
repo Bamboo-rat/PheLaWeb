@@ -4,6 +4,7 @@ import com.example.be_phela.dto.request.CustomerCreateDTO;
 import com.example.be_phela.dto.response.AdminResponseDTO;
 import com.example.be_phela.dto.response.CustomerResponseDTO;
 import com.example.be_phela.exception.DuplicateResourceException;
+import com.example.be_phela.exception.ResourceNotFoundException;
 import com.example.be_phela.interService.ICustomerService;
 import com.example.be_phela.mapper.CustomerMapper;
 import com.example.be_phela.model.Customer;
@@ -21,12 +22,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerService implements ICustomerService {
-    CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
     CustomerMapper customerMapper;;
     BCryptPasswordEncoder passwordEncoder;
 
@@ -36,8 +38,7 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    @Transactional
-    public Customer createCustomer(@Valid CustomerCreateDTO customerCreateDTO) {
+    public Customer buildCustomer(@Valid CustomerCreateDTO customerCreateDTO) {
         if (customerRepository.existsByUsername(customerCreateDTO.getUsername())) {
             throw new DuplicateResourceException("Tên người dùng đã tồn tại");
         }
@@ -50,13 +51,23 @@ public class CustomerService implements ICustomerService {
         customer.setStatus(Status.PENDING);
         customer.setRole(Roles.CUSTOMER);
 
-        return customerRepository.save(customer);
+        return customer;
     }
 
+    @Transactional
+    public Customer saveCustomer(Customer customer) {
+        return customerRepository.save(customer);
+    }
 
     @Override
     public Page<CustomerResponseDTO> getAllCustomers(Pageable pageable) {
         return customerRepository.findAll(pageable)
                 .map(customerMapper::toCustomerResponseDTO);
+    }
+
+    @Override
+    public Customer findAdminByUsername(String username) {
+        return customerRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Admin not found with username: " + username));
     }
 }

@@ -23,7 +23,7 @@ import java.util.List;
 public class BranchController {
     BranchService branchService;
 
-    @PostMapping
+    @PostMapping("creatnew")
     public ResponseEntity<Branch> createBranch(@RequestBody Branch branch) {
         try {
             Branch createdBranch = branchService.createBranch(branch);

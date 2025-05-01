@@ -8,9 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ICustomerService {
     public String generateCustomerCode();
-    Customer createCustomer(CustomerCreateDTO customerCreateDTO);
+    Customer buildCustomer(CustomerCreateDTO customerCreateDTO);
     Page<CustomerResponseDTO> getAllCustomers(Pageable pageable);
+    Customer findAdminByUsername(String username);
 }

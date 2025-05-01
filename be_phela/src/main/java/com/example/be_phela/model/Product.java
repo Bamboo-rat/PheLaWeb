@@ -25,11 +25,10 @@ public class Product {
     @Column(name = "product_id", nullable = false, unique = true)
     private String productId;
 
-    @NotBlank(message = "Product code is required")
     @Column(name = "product_code", nullable = false, unique = true)
     private String productCode;
 
-    @NotBlank(message = "Product name is required")
+//    @NotBlank(message = "Product name is required")
     @Column(name = "product_name", nullable = false)
     private String productName;
 

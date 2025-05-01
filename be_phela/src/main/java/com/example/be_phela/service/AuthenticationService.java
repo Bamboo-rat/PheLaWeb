@@ -9,13 +9,12 @@ import com.example.be_phela.model.Admin;
 import com.example.be_phela.model.Customer;
 import com.example.be_phela.model.VerificationToken;
 import com.example.be_phela.model.enums.Roles;
-import com.example.be_phela.repository.AdminRepository;
-import com.example.be_phela.repository.CustomerRepository;
 import com.example.be_phela.repository.VerificationTokenRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import jakarta.mail.MessagingException;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,6 +27,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -46,7 +46,6 @@ public class AuthenticationService {
     final AuthenticationManager authenticationManager;
     final VerificationTokenRepository verificationTokenRepository;
     final EmailService emailService;
-    private final AdminMapperImpl adminMapperImpl;
 
     @Value("${jwt.signer-key}")
     @NonFinal
@@ -57,8 +56,11 @@ public class AuthenticationService {
     long jwtExpirationHours;
 
     // Đăng ký admin
+    @Transactional(rollbackFor = Exception.class)
     public AuthenticationResponse registerAdmin(AdminCreateDTO request, String clientIp) throws MessagingException {
-        Admin admin = adminService.createAdmin(request, clientIp);
+        // Tạo Admin
+        Admin admin = adminService.buildAdmin(request, clientIp);
+
         // Tạo và lưu token xác thực
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = VerificationToken.builder()
@@ -67,17 +69,27 @@ public class AuthenticationService {
                 .customer(null)
                 .expiryDate(LocalDateTime.now().plusHours(24)) // Hết hạn sau 24 giờ
                 .build();
-        verificationTokenRepository.save(verificationToken);
 
         // Gửi email xác nhận
-        emailService.sendVerificationEmail(admin.getEmail(), token);
+        try {
+            emailService.sendVerificationEmail(admin.getEmail(), token);
+        } catch (MessagingException e) {
+            log.error("Failed to send verification email to {}: {}", admin.getEmail(), e.getMessage());
+            throw new MessagingException("Không thể gửi email xác nhận: " + e.getMessage(), e);
+        }
+
+        // Nếu gửi email thành công, lưu admin và token vào database
+        adminService.saveAdmin(admin);
+        verificationTokenRepository.save(verificationToken);
 
         return buildResponse(admin.getUsername(), admin.getRole().name());
     }
 
     // Đăng ký customer
-    public AuthenticationResponse registerCustomer(CustomerCreateDTO request) throws MessagingException{
-        Customer customer = customerService.createCustomer(request);
+    @Transactional(rollbackFor = Exception.class)
+    public AuthenticationResponse registerCustomer(CustomerCreateDTO request) throws MessagingException {
+        // Tạo Customer (lưu vào database)
+        Customer customer = customerService.buildCustomer(request);
 
         // Tạo và lưu token xác thực
         String token = UUID.randomUUID().toString();
@@ -90,7 +102,12 @@ public class AuthenticationService {
         verificationTokenRepository.save(verificationToken);
 
         // Gửi email xác nhận
-        emailService.sendVerificationEmail(customer.getEmail(), token);
+        try {
+            emailService.sendVerificationEmail(customer.getEmail(), token);
+        } catch (MessagingException e) {
+            log.error("Failed to send verification email to {}: {}", customer.getEmail(), e.getMessage());
+            throw new MessagingException("Không thể gửi email xác nhận: " + e.getMessage(), e);
+        }
 
         return buildResponse(customer.getUsername(), customer.getRole().name());
     }
@@ -122,10 +139,10 @@ public class AuthenticationService {
         String username = userDetails.getUsername();
 
         if (userDetails instanceof Customer customer) {
-            return new AuthenticationResponse(jwtToken, true, username, "CUSTOMER",expiresAt);
+            return new AuthenticationResponse(jwtToken, username, "CUSTOMER", expiresAt);
         } else if (userDetails instanceof Admin admin) {
             Roles role = admin.getRole();
-            return new AuthenticationResponse(jwtToken, true, username, role.name(),expiresAt);
+            return new AuthenticationResponse(jwtToken, username, role.name(), expiresAt);
         }
 
         throw new RuntimeException("UserDetails không hợp lệ để tạo AuthenticationResponse.");
@@ -137,7 +154,6 @@ public class AuthenticationService {
         log.info("Đăng nhập thành công: username={}, role={}", username, role);
         return AuthenticationResponse.builder()
                 .token(token)
-                .authenticated(true)
                 .username(username)
                 .role(role)
                 .build();

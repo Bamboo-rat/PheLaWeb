@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationResponse {
     String token;
-    boolean authenticated;
     String username;
     String role;
     LocalDateTime expiresAt;

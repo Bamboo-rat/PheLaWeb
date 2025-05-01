@@ -2,12 +2,6 @@
     "mainMenu": [
         {
           "id":1,
-          "title": "Tổng quan",
-          "link": "/",
-          "subMenu": []
-        },
-        {
-          "id":2,
           "title": "Sản phẩm",
           "link": "/#",
           "subMenu": [
@@ -22,7 +16,7 @@
           ]
         },
         {
-          "id":3,
+          "id":2,
           "title": "Bán hàng",
           "link": "/#",
           "subMenu": [
@@ -37,7 +31,7 @@
           ]
         },
         {
-          "id":4,
+          "id":3,
           "title": "Báo cáo",
           "link": "/#",
           "subMenu": [
@@ -46,7 +40,7 @@
           ]
         },
         {
-          "id":6,
+          "id":4,
           "title": "Khuyến mãi",
           "link": "/#",
           "subMenu": [

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import phela from "../../../assets/images/phela.jpg"; // Import ảnh
-import Login from "./Login";
-import Register from "./Register";
+import Login from "./LoginAdmin";
+import Register from "./RegisterAdmin";
 
 const LoginRegister = () => {
     const [isRegister, setIsRegister] = useState(false);

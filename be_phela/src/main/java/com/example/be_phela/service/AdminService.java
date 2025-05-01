@@ -3,6 +3,7 @@ package com.example.be_phela.service;
 import com.example.be_phela.dto.request.AdminCreateDTO;
 import com.example.be_phela.dto.response.AdminResponseDTO;
 import com.example.be_phela.exception.DuplicateResourceException;
+import com.example.be_phela.exception.ResourceNotFoundException;
 import com.example.be_phela.interService.IAdminService;
 import com.example.be_phela.mapper.AdminMapper;
 import com.example.be_phela.model.Admin;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class    AdminService implements IAdminService {
+public class AdminService implements IAdminService {
 
     AdminRepository adminRepository;
     BranchRepository branchRepository;
@@ -39,8 +40,7 @@ public class    AdminService implements IAdminService {
     }
 
     @Override
-    @Transactional
-    public Admin createAdmin(@Valid AdminCreateDTO adminCreateDTO, String ip) {
+    public Admin buildAdmin(@Valid AdminCreateDTO adminCreateDTO, String ip) {
 
         if (adminRepository.existsByUsername(adminCreateDTO.getUsername())) {
             throw new DuplicateResourceException("Admin username already exists");
@@ -60,6 +60,11 @@ public class    AdminService implements IAdminService {
 //                .orElseThrow(() -> new RuntimeException("Chi nhánh mặc định không tồn tại"));
 //        admin.setBranch(defaultBranch);
 
+        return admin;
+    }
+
+    @Transactional
+    public Admin saveAdmin(Admin admin) {
         return adminRepository.save(admin);
     }
 
@@ -67,5 +72,11 @@ public class    AdminService implements IAdminService {
     public Page<AdminResponseDTO> getAllAdmins(Pageable pageable) {
         return adminRepository.findAll(pageable)
                 .map(adminMapper::toAdminResponseDTO);
+    }
+
+    @Override
+    public Admin findAdminByUsername(String username) {
+        return adminRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Admin not found with username: " + username));
     }
 }

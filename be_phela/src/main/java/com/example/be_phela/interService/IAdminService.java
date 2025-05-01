@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface IAdminService {
     String generateEmployCode();
-    Admin createAdmin(AdminCreateDTO adminCreateDTO, String ip);
+    Admin buildAdmin(AdminCreateDTO adminCreateDTO, String ip);
     Page<AdminResponseDTO> getAllAdmins(Pageable pageable);
+    Admin findAdminByUsername(String username);
 }
