@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { registerCustomer } from '~/services/authServices';
 
 const Register = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -15,9 +17,12 @@ const Register = () => {
       const handleRegister = async () => {
         try {
           await registerCustomer(formData);
-          console.log('Customer registration successful');
+          console.log('Khách hàng đăng ký thành công');
+          alert('Đăng ký thành công!');
+          navigate('/');
         } catch (err) {
-          setError('Customer registration failed.');
+          setError('Không thể đăng ký, vui lòng thử lại sau!');
+          console.error('Lỗi đăng ký:', err);
         }
       };
     return (

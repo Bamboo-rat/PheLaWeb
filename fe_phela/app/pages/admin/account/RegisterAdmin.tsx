@@ -1,9 +1,10 @@
 import { route } from "@react-router/dev/routes";
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { registerAdmin } from '~/services/authServices';
 
 const RegisterAdmin = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         fullname: '',
         username: '',
@@ -66,10 +67,11 @@ const RegisterAdmin = () => {
             });
             setError('');
             // Chuyển hướng sau khi đăng ký thành công
-            route("login-register-admin", "routes/loginRegisterAdmin.tsx");
+            navigate('/');
         } catch (err: any) {
             // Hiển thị lỗi chi tiết từ backend nếu có
             setError(err.response?.data?.message || 'Admin registration failed.');
+            alert('Đăng ký không thành công! Vui lòng thử lại sau!');
         }
     };
 

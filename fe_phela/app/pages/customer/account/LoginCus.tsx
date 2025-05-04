@@ -1,9 +1,11 @@
 import { type RouteConfig, index, route, layout } from "@react-router/dev/routes";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaFacebookF, FaGoogle } from "react-icons/fa";
 import { loginCustomer } from "~/services/authServices";
 
 const LoginAdmin = () => {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -14,9 +16,10 @@ const LoginAdmin = () => {
             const response = await loginCustomer(credentials);
             console.log('Customer login successful:', response);
             setError(''); // Clear error if login succeeds
-            route("/","routes/CustomerDashboard.tsx");
+            navigate('/');
         } catch (err) {
-            setError('Customer login failed.');
+            setError('Quên tài khoản hoặc mật khẩu không đúng.');
+            alert('Đăng nhập không thành công!');
         }
     };
 

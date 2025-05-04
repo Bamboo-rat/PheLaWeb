@@ -99,7 +99,7 @@ public class AuthenticationService {
                 .customer(customer)
                 .expiryDate(LocalDateTime.now().plusHours(24)) // Hết hạn sau 24 giờ
                 .build();
-        verificationTokenRepository.save(verificationToken);
+
 
         // Gửi email xác nhận
         try {
@@ -108,6 +108,9 @@ public class AuthenticationService {
             log.error("Failed to send verification email to {}: {}", customer.getEmail(), e.getMessage());
             throw new MessagingException("Không thể gửi email xác nhận: " + e.getMessage(), e);
         }
+
+        customerService.saveCustomer(customer);
+        verificationTokenRepository.save(verificationToken);
 
         return buildResponse(customer.getUsername(), customer.getRole().name());
     }

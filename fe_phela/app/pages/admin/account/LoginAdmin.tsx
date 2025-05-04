@@ -17,7 +17,8 @@ const Login = () => {
             setError('');
             navigate('/admin/dashboard');
         } catch (err) {
-            setError('Admin login failed.');
+            setError('Quên tài khoản hoặc mật khẩu không đúng!');
+            alert('Đăng nhập không thành công!');
         }
     };
 
