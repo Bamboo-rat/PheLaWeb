@@ -191,8 +191,14 @@ const LoginCustomer = () => {
 
             {/* Forgot Password Section */}
             {showForgotPassword && (
-                <div className="fixed inset-0 flex justify-start items-center bg-gray-600 bg-opacity-50"> {/* Thay đổi justify-center thành justify-start */}
-                    <div className="bg-white p-8 rounded-lg shadow-xl w-1/2 h-full flex flex-col justify-center items-center"> {/* Thêm w-1/2 và h-full */}
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-[2px]"
+                    onClick={() => { if (!loading) handleCloseForgotPassword(); }}
+                >
+                    <div
+                        className="flex max-h-[85vh] w-full max-w-md flex-col items-center overflow-y-auto rounded-lg bg-white p-8 shadow-xl"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         {resetStage === 'email' && (
                             <>
                                 <h3 className="text-2xl font-bold mb-4 text-center">Quên mật khẩu</h3>

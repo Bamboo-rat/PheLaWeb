@@ -153,7 +153,7 @@ const RecruitmentDetail: React.FC = () => {
       <Header />
 
       {/* Main Content */}
-      <div className={`container mx-auto px-4 py-8 ${showApplicationForm ? 'blur-sm' : ''}`}>
+      <div className="container mx-auto px-4 py-8">
         {/* Job Header */}
         <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
           <div className="p-6 md:p-8">
@@ -261,9 +261,12 @@ const RecruitmentDetail: React.FC = () => {
 
       {/* Application Form Modal */}
       {showApplicationForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-[2px]"
+          onClick={() => setShowApplicationForm(false)}
+        >
           <div
-            className="relative bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+            className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="sticky top-0 bg-white z-10 p-4 border-b flex justify-between items-center">

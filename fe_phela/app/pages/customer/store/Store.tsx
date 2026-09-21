@@ -62,8 +62,14 @@ const Store = () => {
     <div className="relative">
       {/* Map Overlay */}
       {selectedBranch && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex items-start justify-center pt-20">
-          <div className="bg-white mx-4 max-w-4xl w-full rounded-lg shadow-lg">
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4 backdrop-blur-[2px]"
+          onClick={closeMap}
+        >
+          <div
+            className="max-h-[85vh] w-full max-w-4xl overflow-y-auto rounded-lg bg-white shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex justify-between items-center p-4 border-b">
               <h3 className="text-xl font-bold">{selectedBranch.branchName}</h3>
               <button
@@ -107,7 +113,7 @@ const Store = () => {
       )}
 
       {/* Main Content */}
-      <div className={selectedBranch ? 'blur-sm' : ''}>
+      <div>
         <div className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
           <Header />
         </div>
