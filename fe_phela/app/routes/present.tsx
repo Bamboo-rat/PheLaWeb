@@ -1,4 +1,4 @@
-import type { Route } from "./+types/product";
+import type { Route } from "./+types/present";
 import Present from "~/pages/admin/promotion/Present";
 
 export function meta({}: Route.MetaArgs) {

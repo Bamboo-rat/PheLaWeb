@@ -5,6 +5,8 @@ import SockJS from 'sockjs-client';
 import { getChatHistory } from '~/services/chatServices';
 import { useAuth, isCustomerUser } from '~/AuthContext';
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8080').replace(/\/$/, '');
+
 interface ChatMessage {
     id?: string;
     content?: string;
@@ -35,7 +37,7 @@ const ChatWidget = () => {
         if (stompClientRef.current && stompClientRef.current.connected) return;
 
         const client = new Client({
-            webSocketFactory: () => new SockJS('https://phela-backend-dyl7.onrender.com/ws'),
+            webSocketFactory: () => new SockJS(`${API_BASE_URL}/ws`),
             onConnect: () => {
                 console.log('Connected to chat server!');
                 client.subscribe(`/topic/chat/${currentCustomerId}`, (message) => {
@@ -182,7 +184,7 @@ const ChatWidget = () => {
         formData.append('file', file);
 
         try {
-            const response = await fetch('https://phela-backend-dyl7.onrender.com/api/chat/uploadImage', {
+            const response = await fetch(`${API_BASE_URL}/api/chat/uploadImage`, {
                 method: 'POST',
                 body: formData,
             });

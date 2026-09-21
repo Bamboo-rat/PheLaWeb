@@ -63,9 +63,9 @@ const HeadOrder = () => {
           <img src={logo} alt="Phê La" />
         </Link>
       </div>
-      <div className="navbar-links ml-7 relative flex items-center">
+      <div className="navbar-links relative flex items-center border-2 rounded-">
         {user ? (
-          <div className="flex items-center space-x-16">
+          <div className="flex items-center space-x-4 md:space-x-8">
             {user.type === 'customer' && (
               <Link to="/cart" className="relative">
                 <FaShoppingCart className="text-white text-2xl cursor-pointer" />
@@ -77,7 +77,7 @@ const HeadOrder = () => {
             <div className="user-menu group">
               <div className="flex items-center cursor-pointer">
                 <RiAccountCircleLine className="text-white mr-1 text-2xl" />
-                <span className="mr-2 uppercase">{user.username}</span>
+                <span className="mr-2 uppercase hidden sm:inline">{user.username}</span>
               </div>
               <div className="dropdown-menu group-hover:visible group-hover:opacity-100">
                 {user.type === 'customer' && (

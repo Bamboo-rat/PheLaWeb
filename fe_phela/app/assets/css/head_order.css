@@ -4,9 +4,8 @@
 
 @layer components {
     .navbar-order {
-        @apply flex justify-center gap-96 items-center bg-black px-5 py-2.5;
+        @apply flex items-center justify-between bg-black px-4 py-3 md:px-6;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 12px 20px;
     }
 
     .navbar-logo img {
@@ -14,7 +13,7 @@
     }
 
     .navbar-links {
-        @apply flex gap-8 items-center;
+        @apply flex items-center gap-3 md:gap-8;
     }
 
     .navbar-links a {
@@ -54,8 +53,10 @@
 
     /* Style cho dropdown menu */
     .dropdown-menu {
-        @apply absolute left-0 mt-5 bg-black shadow-lg p-2 invisible opacity-0 transition-all duration-300;
+        @apply absolute right-0 mt-3 bg-black shadow-lg p-2 invisible opacity-0 transition-all duration-300;
+        left: auto;
         min-width: 220px;
+        max-width: calc(100vw - 1rem);
         z-index: 10;
     }
 

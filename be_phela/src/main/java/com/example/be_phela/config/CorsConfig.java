@@ -17,7 +17,7 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
 
-    @Value("${cors.allowed-origins:http://localhost:3000,http://localhost:3001,https://phela-customer-w519.onrender.com,https://phela-admin.onrender.com}")
+    @Value("${cors.allowed-origins:http://localhost:3000,http://localhost:3001,http://localhost:5173}")
     private String allowedOrigins;
 
     @Bean

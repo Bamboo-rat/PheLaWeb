@@ -357,11 +357,11 @@ const Cart = () => {
   if (error) return <div className="text-center py-8 text-red-500">{error}</div>;
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50 text-gray-900">
       <div className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
         <HeadOrder />
       </div>
-      <div className="container mx-auto mt-16 p-4 max-w-4xl">
+      <div className="container mx-auto px-4 pt-24 pb-8 max-w-5xl">
         {cartItems.length === 0 ? (
           <div className="text-center py-8">
             <p className="text-lg mb-4">Giỏ hàng của bạn hiện đang trống</p>
@@ -412,11 +412,11 @@ const Cart = () => {
                 <h2 className="text-xl font-semibold mb-4">Sản phẩm</h2>
                 <div className="space-y-4">
                   {cartItems.map((item) => (
-                    <div key={item.cartItemId} className="flex items-center border-b pb-4">
+                    <div key={item.cartItemId} className="flex flex-col gap-3 border-b pb-4 md:flex-row md:items-center md:gap-4">
                       <Link to={`/san-pham/${item.productId}`}>
                         <img src={item.product?.imageUrl || '/images/default-product.png'} alt={item.product?.productName} className="w-20 h-20 object-cover rounded mr-4" />
                       </Link>
-                      <div className="flex-1">
+                      <div className="w-full flex-1">
                         <Link to={`/san-pham/${item.productId}`} className="font-semibold hover:text-primary">
                           {item.product?.productName || 'Sản phẩm không xác định'}
                         </Link>
@@ -451,7 +451,7 @@ const Cart = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-4">
+                      <div className="flex w-full items-center justify-between gap-3 md:w-auto md:justify-end md:space-x-4">
                         <div className="flex items-center border rounded">
                           <button onClick={() => updateQuantity(item.cartItemId, item.quantity - 1)} className="px-3 py-1 hover:bg-gray-100">-</button>
                           <span className="px-3">{item.quantity}</span>

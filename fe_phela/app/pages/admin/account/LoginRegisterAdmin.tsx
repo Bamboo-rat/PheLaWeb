@@ -12,33 +12,28 @@ const LoginRegister = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="relative w-full h-screen flex overflow-hidden">
-                {/* Form (Login hoặc Register) */}
+        <div className="min-h-screen bg-gray-100 text-gray-900">
+            <div className="flex min-h-screen flex-col md:flex-row">
                 <motion.div
-                    animate={{ x: isRegister ? "0%" : "0%" }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
-                    className="flex w-[200%] h-full"
+                    layout
+                    key={isRegister ? "register" : "login"}
+                    initial={{ opacity: 0, x: -24 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.35, ease: "easeOut" }}
+                    className={`w-full bg-white md:w-1/2 ${isRegister ? "md:order-2" : "md:order-1"}`}
                 >
-                    {/* Login Form */}
-                    <div className="w-1/2 h-full">
-                        <Login />
-                    </div>
-
-                    {/* Register Form */}
-                    <div className="w-1/2 h-full">
-                        <Register />
-                    </div>
+                    {isRegister ? <Register /> : <Login />}
                 </motion.div>
 
-                {/* Ảnh */}
                 <motion.div
-                    className="absolute top-0 left-1/2 w-1/2 h-full bg-cover bg-center flex items-end justify-center"
+                    layout
+                    className={`relative hidden h-screen w-full items-end justify-center bg-cover bg-center md:flex md:w-1/2 ${isRegister ? "md:order-1" : "md:order-2"}`}
                     style={{
                         backgroundImage: `url(${phela})`,
                     }}
-                    animate={{ x: isRegister ? "-100%" : "0%" }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                    initial={{ opacity: 0.9 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ layout: { duration: 0.5, ease: "easeInOut" }, opacity: { duration: 0.35 } }}
                 >
                     <button
                         onClick={toggleForm}
@@ -47,7 +42,6 @@ const LoginRegister = () => {
                         {isRegister ? "Login" : "Register"}
                     </button>
                 </motion.div>
-
             </div>
         </div>
     );

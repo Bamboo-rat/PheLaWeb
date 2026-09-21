@@ -1,5 +1,4 @@
 import { type RouteConfig, index, route, layout, prefix } from "@react-router/dev/routes";
-import { Children } from "react";
 
 const customerRoutes: RouteConfig = [
     index("routes/CustomerDashboard.tsx"),
@@ -10,6 +9,9 @@ const customerRoutes: RouteConfig = [
     route("cart", "routes/cart.tsx"),
     route("payment", "routes/payment.tsx"),
     route("payment-return", "routes/paymentReturn.tsx"),
+    route("paymentReturn", "routes/paymentReturnAlias.tsx"),
+    route("payment-cancel", "routes/payment-cancel.tsx"),
+    route("paymentCancel", "routes/paymentCancelAlias.tsx"),
 
     // Câu chuyện thương hiệu
     route("ve-chung-toi", "routes/aboutUs.tsx"),

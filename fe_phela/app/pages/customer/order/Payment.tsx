@@ -197,11 +197,11 @@ const Payment = () => {
   const totalDiscount = cart.promotionCarts.reduce((sum, promo) => sum + promo.discountAmount, 0);
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       <div className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
         <HeadOrder />
       </div>
-      <div className="container mx-auto mt-20 p-4 max-w-4xl">
+      <div className="container mx-auto px-4 pt-24 pb-8 max-w-5xl">
         <h1 className="text-3xl font-bold mb-6 text-center">Xác nhận Đơn hàng</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

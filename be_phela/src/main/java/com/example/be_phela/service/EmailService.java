@@ -1,24 +1,20 @@
 package com.example.be_phela.service;
 
-import com.sendgrid.Method;
-import com.sendgrid.Request;
-import com.sendgrid.Response;
-import com.sendgrid.SendGrid;
-import com.sendgrid.helpers.mail.Mail;
-import com.sendgrid.helpers.mail.objects.Content;
-import com.sendgrid.helpers.mail.objects.Email;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class EmailService {
 
-    @Value("${SENDGRID_API_KEY}")
-    private String sendGridApiKey;
+    private final JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
     private String fromEmail;
@@ -32,7 +28,6 @@ public class EmailService {
         String htmlContent = "<!DOCTYPE html>"
                 + "<html lang='vi'>"
                 + "<head>"
-                // ... (toàn bộ phần style CSS của bạn giữ nguyên)
                 + "    <style>"
                 + "        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }"
                 + "        .header { text-align: center; padding: 20px 0; background-color: #6F4E37; color: white; border-radius: 8px 8px 0 0; }"
@@ -61,7 +56,6 @@ public class EmailService {
         String htmlContent = "<!DOCTYPE html>"
                 + "<html lang='vi'>"
                 + "<head>"
-                // ... (toàn bộ phần style CSS của bạn giữ nguyên)
                 + "    <style>"
                 + "        body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }"
                 + "        .header { text-align: center; padding: 20px 0; background-color: #6F4E37; color: white; border-radius: 8px 8px 0 0; }"
@@ -86,30 +80,21 @@ public class EmailService {
         sendEmail(to, "Mã OTP đặt lại mật khẩu - Phê La", htmlContent);
     }
 
-    // Phương thức private để gửi email, tránh lặp code
     private void sendEmail(String to, String subject, String htmlContent) {
-        Email fromEmailObj = new Email(this.fromEmail);
-        Email toEmailObj = new Email(to);
-        Content content = new Content("text/html", htmlContent);
-        Mail mail = new Mail(fromEmailObj, subject, toEmailObj, content);
-
-        SendGrid sg = new SendGrid(sendGridApiKey);
-        Request request = new Request();
-
         try {
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-            log.info("Sending email via SendGrid to: {}", to);
-            Response response = sg.api(request);
+            helper.setFrom(fromEmail);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true); // true = HTML
 
-            if (response.getStatusCode() >= 400) {
-                log.error("Failed to send email. Status Code: {}. Response Body: {}", response.getStatusCode(), response.getBody());
-            } else {
-                log.info("Email sent successfully to: {}. Status Code: {}", to, response.getStatusCode());
-            }
-        } catch (IOException ex) {
+            log.info("Sending email via Spring Mail (Gmail SMTP) to: {}", to);
+            mailSender.send(message);
+            log.info("Email sent successfully to: {}", to);
+
+        } catch (MessagingException ex) {
             log.error("Error sending email to {}", to, ex);
             throw new RuntimeException("Error sending email", ex);
         }

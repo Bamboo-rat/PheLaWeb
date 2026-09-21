@@ -34,7 +34,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.Random;
+import java.security.SecureRandom;
 import java.util.UUID;
 
 @Slf4j
@@ -74,19 +74,10 @@ public class AuthenticationService {
                 .expiryDate(LocalDateTime.now().plusHours(24)) // Hết hạn sau 24 giờ
                 .build();
 
-        emailService.sendVerificationEmail(admin.getEmail(), verificationToken.getToken());
-
-//        // Gửi email xác nhận
-//        try {
-//            emailService.sendVerificationEmail(admin.getEmail(), token);
-//        } catch (MessagingException e) {
-//            log.error("Failed to send verification email to {}: {}", admin.getEmail(), e.getMessage());
-//            throw new MessagingException("Không thể gửi email xác nhận: " + e.getMessage(), e);
-//        }
-
-        // Nếu gửi email thành công, lưu admin và token vào database
+        // Lưu DB trước, gửi email sau để tránh token không tồn tại khi user click link
         adminService.saveAdmin(admin);
         verificationTokenRepository.save(verificationToken);
+        emailService.sendVerificationEmail(admin.getEmail(), token);
 
         return buildRegistrationResponse(admin.getUsername(), admin.getRole().name());
     }
@@ -106,18 +97,10 @@ public class AuthenticationService {
                 .expiryDate(LocalDateTime.now().plusHours(24)) // Hết hạn sau 24 giờ
                 .build();
 
-        emailService.sendVerificationEmail(customer.getEmail(), verificationToken.getToken());
-
-        // Gửi email xác nhận
-//        try {
-//            emailService.sendVerificationEmail(customer.getEmail(), token);
-//        } catch (MessagingException e) {
-//            log.error("Failed to send verification email to {}: {}", customer.getEmail(), e.getMessage());
-//            throw new MessagingException("Không thể gửi email xác nhận: " + e.getMessage(), e);
-//        }
-
+        // Lưu DB trước, gửi email sau để tránh token không tồn tại khi user click link
         customerService.saveCustomer(customer);
         verificationTokenRepository.save(verificationToken);
+        emailService.sendVerificationEmail(customer.getEmail(), token);
 
         return buildRegistrationResponse(customer.getUsername(), customer.getRole().name());
     }
@@ -302,8 +285,8 @@ public class AuthenticationService {
     }
 
     private String generateOtp() {
-        Random random = new Random();
-        int otp = 100000 + random.nextInt(900000); // Generates a 6-digit OTP
+        SecureRandom secureRandom = new SecureRandom();
+        int otp = 100000 + secureRandom.nextInt(900000); // Generates a cryptographically secure 6-digit OTP
         return String.valueOf(otp);
     }
 }

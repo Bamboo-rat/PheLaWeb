@@ -6,6 +6,8 @@ import { useAuth, isAdminUser } from '~/AuthContext';
 import { getConversations, getChatHistory } from '~/services/chatServices';
 import Header from '~/components/admin/Header';
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8080').replace(/\/$/, '');
+
 interface ChatMessage {
     id?: string;
     content?: string; // Có thể null nếu chỉ gửi ảnh
@@ -57,7 +59,7 @@ const Support = () => {
             loadInitialConversations();
 
             const client = new Client({
-                webSocketFactory: () => new SockJS('https://phela-backend-dyl7.onrender.com/ws'),
+                webSocketFactory: () => new SockJS(`${API_BASE_URL}/ws`),
                 onConnect: () => {
                     console.log('Admin connected!');
                     client.subscribe('/topic/chat/**', (message) => {
@@ -187,7 +189,7 @@ const Support = () => {
         formData.append('file', file);
 
         try {
-            const response = await fetch('https://phela-backend-dyl7.onrender.com/api/chat/uploadImage', { // Cập nhật URL API
+            const response = await fetch(`${API_BASE_URL}/api/chat/uploadImage`, {
                 method: 'POST',
                 body: formData,
             });

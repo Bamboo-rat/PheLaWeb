@@ -147,7 +147,7 @@ const LoginCustomer = () => {
     };
 
     return (
-        <div className="flex flex-col justify-center items-center p-10 bg-white h-screen">
+        <div className="flex flex-col justify-center items-center p-10 bg-white min-h-screen">
             <h2 className="text-3xl font-bold mb-6">Login</h2>
             <input
                 type="text"
